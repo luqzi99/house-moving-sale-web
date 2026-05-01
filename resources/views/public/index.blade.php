@@ -57,8 +57,9 @@
         @foreach($items as $i => $item)
         @php
             $colors = ['#D4A574','#8B7355','#4A6FA5','#7B68AE','#E07A5F','#BC6C25','#606C38','#457B9D','#E63946','#CDB4DB'];
-            $color = $colors[$i % count($colors)];
-            $msg = urlencode("Hai! Saya berminat dengan *{$item->name}* ({$item->displayPrice()}) dari Moving Out Sale kamu. Masih available?");
+            $color   = $colors[$i % count($colors)];
+            $itemUrl = route('item.show', $item);
+            $msg     = urlencode("Hai! Saya berminat dengan *{$item->name}* ({$item->displayPrice()}) dari Moving Out Sale kamu. Masih available?\n\n{$itemUrl}");
             $itemData = json_encode([
                 'name'      => $item->name,
                 'desc'      => $item->description,
@@ -68,6 +69,7 @@
                 'emoji'     => $item->emoji,
                 'images'    => $item->images ?? [],
                 'color'     => $color,
+                'itemUrl'   => $itemUrl,
                 'waLink'    => "https://wa.me/{$whatsappNumber}?text={$msg}",
             ]);
         @endphp
@@ -186,6 +188,10 @@
                     Hubungi WhatsApp
                 </a>
             </div>
+            <a id="modal-item-link" href="#"
+                class="mt-3 block text-center text-xs text-gray-400 hover:text-gray-600 transition-colors underline underline-offset-2">
+                Lihat halaman penuh item →
+            </a>
         </div>
     </div>
 </div>
@@ -205,6 +211,7 @@ function openModal(item) {
     document.getElementById('modal-price').style.color     = item.color;
     document.getElementById('modal-category').textContent  = item.category;
     document.getElementById('modal-wa').href               = item.waLink;
+    document.getElementById('modal-item-link').href        = item.itemUrl;
 
     const condEl = document.getElementById('modal-condition');
     condEl.textContent       = item.condition;

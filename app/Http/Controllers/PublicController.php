@@ -37,4 +37,16 @@ class PublicController extends Controller
 
         return view('public.index', compact('items', 'categories', 'activeCategory', 'search', 'whatsappNumber', 'ogImage'));
     }
+
+    public function show(Item $item)
+    {
+        $whatsappNumber = env('WHATSAPP_NUMBER', '601116185660');
+        $itemUrl        = route('item.show', $item);
+        $images         = array_values((array) ($item->images ?? []));
+        $ogImage        = $images[0] ?? null;
+        $metaTitle      = "{$item->name} — {$item->displayPrice()} | Moving Out Sale";
+        $metaDesc       = $item->description;
+
+        return view('public.show', compact('item', 'whatsappNumber', 'itemUrl', 'images', 'ogImage', 'metaTitle', 'metaDesc'));
+    }
 }

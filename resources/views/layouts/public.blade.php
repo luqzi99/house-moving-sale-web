@@ -6,14 +6,14 @@
     <title>{{ $metaTitle ?? config('app.name', 'Moving Out Sale') }}</title>
 
     {{-- Primary --}}
-    <meta name="description" content="{{ $metaDesc ?? 'Nak pindah — letgo everything! Barang berkualiti dengan harga berpatutan. Self-pickup KL/Selangor.' }}">
+    <meta name="description" content="{{ $metaDesc ?? 'Hi! 👋 Saya Luqman dari Blok C 14-12 — tengah kemas rumah sebelum berpindah. Ada banyak barang elok nak dilepaskan dengan harga berpatutan. Jom tengok, mana tahu ada yang berkenan!' }}">
 
     {{-- Open Graph (WhatsApp, Facebook, Telegram) --}}
     <meta property="og:type"        content="website">
     <meta property="og:url"         content="{{ config('app.url') }}">
     <meta property="og:site_name"   content="Moving Out Sale">
-    <meta property="og:title"       content="{{ $metaTitle ?? 'Moving Out Sale 🏠 — Nak Pindah, Letgo Everything!' }}">
-    <meta property="og:description" content="{{ $metaDesc ?? 'Barang rumah berkualiti dijual murah. Sofa, TV, perabot, dapur & lain-lain. Self-pickup KL/Selangor. First come first serve!' }}">
+    <meta property="og:title"       content="{{ $metaTitle ?? 'Moving Out Sale 🏠 — Clearance Barang Luqman, Blok C 14-12' }}">
+    <meta property="og:description" content="{{ $metaDesc ?? 'Hi! 👋 Saya Luqman dari Blok C 14-12 — tengah kemas rumah sebelum berpindah. Ada banyak barang elok nak dilepaskan dengan harga berpatutan. Jom tengok, mana tahu ada yang berkenan!' }}">
     @isset($ogImage)
     <meta property="og:image"       content="{{ $ogImage }}">
     <meta property="og:image:width" content="1200">
@@ -22,8 +22,8 @@
 
     {{-- Twitter / X --}}
     <meta name="twitter:card"        content="summary_large_image">
-    <meta name="twitter:title"       content="{{ $metaTitle ?? 'Moving Out Sale 🏠 — Nak Pindah, Letgo Everything!' }}">
-    <meta name="twitter:description" content="{{ $metaDesc ?? 'Barang rumah berkualiti dijual murah. Self-pickup KL/Selangor.' }}">
+    <meta name="twitter:title"       content="{{ $metaTitle ?? 'Moving Out Sale 🏠 — Clearance Barang Luqman, Blok C 14-12' }}">
+    <meta name="twitter:description" content="{{ $metaDesc ?? 'Hi! 👋 Saya Luqman dari Blok C 14-12 — tengah kemas rumah sebelum berpindah. Ada banyak barang elok nak dilepaskan dengan harga berpatutan. Jom tengok, mana tahu ada yang berkenan!' }}">
     @isset($ogImage)
     <meta name="twitter:image"       content="{{ $ogImage }}">
     @endisset
