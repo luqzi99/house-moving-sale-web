@@ -1,58 +1,147 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏠 Moving Out Sale
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A simple house clearance sale web app built for sharing within a community. The owner manages items via a private admin panel; the public sees a marketplace-style listing and can contact via WhatsApp directly.
 
-## About Laravel
+**Live:** [house-clearance-sale.luqmanhakimrohaizi.my](https://house-clearance-sale.luqmanhakimrohaizi.my)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Public marketplace**
+- Browse items by category (Perabot, Elektronik, Dapur, Lain-lain)
+- Search by name or description
+- Tap any card to open a detail modal with full description and image carousel
+- WhatsApp button pre-fills the message with item name and price
+- Open Graph meta tags — shareable link shows preview on WhatsApp/Telegram
 
-## Learning Laravel
+**Admin panel** (`/admin`)
+- Secure login (single admin account from `.env`)
+- Full CRUD for items — name, description, price/free, category, condition, emoji, status
+- Multi-image upload, auto-resized to max 1200px and stored on Cloudflare R2
+- Delete individual images or all at once with SweetAlert2 confirmation
+- Manual sort order to control listing sequence
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Stack
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+| Layer | Tech |
+|-------|------|
+| Backend | Laravel 11 (PHP 8.3) |
+| Frontend | Blade + Tailwind CDN (no build step) |
+| Database | MySQL 8 |
+| Storage | Cloudflare R2 (S3-compatible) |
+| Container | Docker Compose |
+| Web server | nginx + PHP-FPM via supervisord |
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Local Development
+
+**Requirements:** Docker + Docker Compose
 
 ```bash
-composer require laravel/boost --dev
+# 1. Clone and enter project
+git clone <repo-url> house-clearance-sale
+cd house-clearance-sale
 
-php artisan boost:install
+# 2. Copy env and fill in values
+cp .env.example .env
+# Edit .env — set ADMIN_EMAIL, ADMIN_PASSWORD, WHATSAPP_NUMBER, R2_* keys
+
+# 3. Start all services (app + MySQL + phpMyAdmin)
+docker compose -f docker-compose.local.yml up -d --build
+
+# 4. Run migrations and seed admin user
+docker compose -f docker-compose.local.yml exec app php artisan migrate --seed
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+| URL | What |
+|-----|------|
+| `http://localhost:8000` | Public marketplace |
+| `http://localhost:8000/admin/login` | Admin panel |
+| `http://localhost:8080` | phpMyAdmin |
 
-## Contributing
+After first setup, just `docker compose -f docker-compose.local.yml up -d` to start.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## Environment Variables
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```env
+APP_NAME="Moving Out Sale"
+APP_URL=https://house-clearance-sale.luqmanhakimrohaizi.my
 
-## Security Vulnerabilities
+DB_HOST=house-clearance-mysql
+DB_DATABASE=house_clearance
+DB_USERNAME=hcsale
+DB_PASSWORD=
+DB_ROOT_PASSWORD=
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=
 
-## License
+WHATSAPP_NUMBER=601116185660   # country code, no +
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+R2_BUCKET=
+R2_ENDPOINT=https://<account-id>.r2.cloudflarestorage.com
+R2_PUBLIC_URL=https://pub-xxxx.r2.dev
+```
+
+---
+
+## VPS Deploy
+
+The app runs as a Docker Compose stack on `/srv/house-clearance-sale`, fronted by a shared nginx gateway.
+
+```bash
+# One-time setup on VPS
+cd /srv
+git clone <repo-url> house-clearance-sale
+cd house-clearance-sale
+cp .env.example .env        # fill in production secrets
+docker compose up -d --build
+docker exec house-clearance-app php artisan key:generate
+docker exec house-clearance-app php artisan migrate --seed
+
+# Drop nginx config and reload gateway
+cp nginx/conf.d/*.conf /srv/nginx/conf.d/
+docker exec nginx-gateway nginx -s reload
+```
+
+**Subsequent deploys:**
+```bash
+bash deploy.sh
+```
+
+---
+
+## Project Structure
+
+```
+.
+├── app/Http/Controllers/
+│   ├── Admin/AuthController.php    # login / logout
+│   ├── Admin/ItemController.php    # CRUD + R2 upload
+│   └── PublicController.php        # marketplace index
+├── app/Models/Item.php
+├── resources/views/
+│   ├── admin/                      # login, items CRUD
+│   ├── layouts/                    # admin + public layouts
+│   └── public/index.blade.php      # marketplace + modal + carousel
+├── docker/
+│   ├── nginx.conf
+│   ├── php.ini
+│   └── supervisord.conf
+├── nginx/conf.d/                   # gateway nginx config
+├── docker-compose.yml              # VPS (external web network)
+├── docker-compose.local.yml        # local dev (phpMyAdmin included)
+└── deploy.sh
+```
+
+---
+
+Built by [luqmanhakimrohaizi.my](https://luqmanhakimrohaizi.my)
