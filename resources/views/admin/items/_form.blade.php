@@ -1,17 +1,17 @@
 @php $isEdit = !is_null($item); @endphp
 
-<div class="grid grid-cols-2 gap-5">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <div class="col-span-2">
         <label class="block text-sm font-medium text-gray-700 mb-1">Nama Barang</label>
         <input type="text" name="name" value="{{ old('name', $item?->name) }}" required
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900">
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 text-base">
         @error('name') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
     </div>
 
     <div class="col-span-2">
         <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
         <textarea name="description" rows="3" required
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900">{{ old('description', $item?->description) }}</textarea>
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 text-base">{{ old('description', $item?->description) }}</textarea>
         @error('description') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
     </div>
 
@@ -19,14 +19,14 @@
         <label class="block text-sm font-medium text-gray-700 mb-1">Harga (RM) — kosongkan jika percuma</label>
         <input type="number" name="price" value="{{ old('price', $item?->price) }}" min="0" step="0.01"
             placeholder="e.g. 150.00"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900">
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 text-base">
         @error('price') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
     </div>
 
     <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
         <select name="category" required
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900">
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 text-base">
             @foreach($categories as $cat)
                 <option value="{{ $cat }}" @selected(old('category', $item?->category) === $cat)>{{ $cat }}</option>
             @endforeach
@@ -36,7 +36,7 @@
     <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Kondisi (e.g. 8/10)</label>
         <input type="text" name="condition" value="{{ old('condition', $item?->condition) }}" required maxlength="20"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900">
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 text-base">
         @error('condition') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
     </div>
 
@@ -44,14 +44,14 @@
         <label class="block text-sm font-medium text-gray-700 mb-1">Emoji</label>
         <input type="text" name="emoji" value="{{ old('emoji', $item?->emoji) }}" required maxlength="10"
             placeholder="e.g. 🛋️"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900">
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 text-base">
         @error('emoji') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
     </div>
 
     <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
         <select name="status" required
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900">
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 text-base">
             <option value="available" @selected(old('status', $item?->status ?? 'available') === 'available')>Available</option>
             <option value="sold" @selected(old('status', $item?->status) === 'sold')>Sold</option>
         </select>
@@ -60,7 +60,7 @@
     <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Sort Order (0 = atas)</label>
         <input type="number" name="sort_order" value="{{ old('sort_order', $item?->sort_order ?? 0) }}" min="0"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900">
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 text-base">
     </div>
 </div>
 
