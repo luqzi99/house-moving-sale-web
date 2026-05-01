@@ -15,11 +15,13 @@
 </div>
 
 {{-- Image carousel --}}
-<div class="relative bg-gray-900 overflow-hidden" style="height: 320px">
+<div class="relative bg-black overflow-hidden w-full" style="aspect-ratio: 1/1">
     @if(!empty($images))
-        <div id="slides" class="flex h-full transition-transform duration-300 ease-out">
+        {{-- Slides track --}}
+        <div id="slides" class="flex h-full transition-transform duration-300 ease-out"
+            style="width: {{ count($images) * 100 }}%; transform: translateX(0)">
             @foreach($images as $url)
-            <div class="flex-shrink-0 w-full h-full">
+            <div style="width: {{ round(100 / count($images), 4) }}%;" class="h-full flex-none">
                 <img src="{{ $url }}" alt="{{ $item->name }}" class="w-full h-full object-cover">
             </div>
             @endforeach
@@ -41,10 +43,7 @@
                 id="dot-{{ $i }}"></button>
             @endforeach
         </div>
-        @endif
 
-        {{-- Photo count badge --}}
-        @if(count($images) > 1)
         <div class="absolute top-3 right-3 bg-black/50 text-white text-xs px-2.5 py-1 rounded-full">
             <span id="slide-counter">1</span>/{{ count($images) }}
         </div>
@@ -123,7 +122,9 @@ const total = {{ count($images) }};
 
 function goTo(i) {
     idx = (i + total) % total;
-    document.getElementById('slides').style.transform = `translateX(-${idx * 100}%)`;
+    // Each slide is (100/total)% of the track; shift by (100/total * idx)% of track = idx * (100/total)%
+    // Simpler: shift the track by -(idx / total * 100)% of its own width
+    document.getElementById('slides').style.transform = `translateX(-${(idx / total * 100)}%)`;
     document.getElementById('slide-counter').textContent = idx + 1;
     document.querySelectorAll('[id^="dot-"]').forEach((d, j) => {
         d.className = `w-2 h-2 rounded-full transition-all ${j === idx ? 'bg-white scale-125' : 'bg-white/50'}`;
